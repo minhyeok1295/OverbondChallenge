@@ -60,7 +60,7 @@ def organize_in_dictionary(file):
             dic[issurance_date][-1]["LastPrice"] = float(result[0][2:])   
         elif (len(result) == 2): #both APl or Pl
             dic[issurance_date][-1]["CleanAsk"] = float(result[0][3:])
-            dic[issurance_date][-1]["LastPrice"] = float(result[1][2:])
+            dic[issurance_date][-1]["LastPrice"] = float(result[1][2:])                                                                                                                                                                                         
     return dic
 
 '''
@@ -86,9 +86,32 @@ def plot(dic):
             if lp != False:
                 plt.plot_date(x, lp, 'go', markersize=2,  xdate=True)
     plt.savefig("result.jpg")
-    
+
+'''
+print out dictionary in specific format date: CleanBid CleanAsk LastPrice
+'''
+def print_dic(dic):
+    output = "=====================\n"
+    output += "date:\t\t CleanBid\t CleanAsk\t LastPrice\n"
+    for k, v in dic.items():
+        date = dt.strptime(k, "%Y%m%d").strftime("%m-%d-%Y")
+        for val in v:
+            out = f"{date}:\t"
+            cb = val.get("CleanBid", False)
+            ca = val.get("CleanAsk", False)
+            lp = val.get("LastPrice", False)
+            if cb != False:
+                out += f"{cb}\t\t"
+            if ca != False:
+                out += f"{ca}\t\t"
+            if lp != False:
+                out += f"{lp}\t"
+            out+= "\n"
+            output += out
+    print(output)
     
 if __name__ == "__main__":
     dic = organize_in_dictionary("XICE_Bond_Close2.tip")
     plot(dic)
+    print_dic(dic)
     
